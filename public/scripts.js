@@ -1,3 +1,4 @@
+/* eslint no-console: 0 */
 const appendItemToList = item => $('.garage__list').append(`
   <li id=${item.id} class="garage__list-item">
     <h2 >${item.name}</h2>
@@ -31,9 +32,7 @@ const fetchAllItemsInGarage = async () => {
   await fetch('api/v1/items')
     .then(response => response.json())
     .then((response) => {
-      response.items.map((item) => {
-        appendItemToList(item);
-      });
+      response.items.map(item => appendItemToList(item));
       const total = response.items.length;
       const sparkling = response.items.filter(item => item.cleanliness === 'Sparkling').length;
       const dusty = response.items.filter(item => item.cleanliness === 'Dusty').length;
@@ -41,7 +40,7 @@ const fetchAllItemsInGarage = async () => {
 
       updateGarageItemStats(total, sparkling, dusty, rancid);
     })
-    .catch(error => console.log(error));
+    .catch(error => console.error(error));
 };
 
 const garageDoorButtonClick = () => {
@@ -82,7 +81,7 @@ async function newItemButtonClick(event) {
     })
     .catch(error => console.error(error));
 
-  fetch('/api/v1/items')
+  await fetch('/api/v1/items')
     .then(response => response.json())
     .then((response) => {
       const total = response.items.length;
@@ -93,7 +92,7 @@ async function newItemButtonClick(event) {
       updateGarageItemStats(total, sparkling, dusty, rancid);
     })
     .catch(error => console.error(error));
-    clearInputFields();
+  clearInputFields();
 }
 
 const enableNewItemSubmitButton = () => {
@@ -112,10 +111,58 @@ function enableButton() {
   }
 }
 
+const sortAscending = (a, b) => {
+  const itemA = a.name.toUpperCase();
+  const itemB = b.name.toUpperCase();
+
+  let comparison = 0;
+  if (itemA > itemB) {
+    comparison = 1;
+  } else if (itemA < itemB) {
+    comparison = -1;
+  }
+  return comparison;
+};
+
+const sortDescending = (a,b) => {
+  const itemA = a.name.toUpperCase();
+  const itemB = b.name.toUpperCase();
+
+  let comparison = 0;
+  if (itemA > itemB) {
+    comparison = 1;
+  } else if (itemA < itemB) {
+    comparison = -1;
+  }
+  return comparison * -1;
+};
+
+
+
+const listSortButtonClick = () => {
+  $('li').remove();
+  fetch('api/v1/items')
+    .then(response => response.json())
+    .then((response) => {
+      if (!$('.garage__list').hasClass('sorted')) {
+        const sorted = response.items.sort(sortAscending);
+        $('li').remove();
+        sorted.map(item => appendItemToList(item));
+        $('.garage__list').toggleClass('sorted');
+      } else {
+        const sorted = response.items.sort(sortDescending);
+        $('li').remove();
+        sorted.map(item => appendItemToList(item));
+        $('.garage__list').toggleClass('sorted');
+      }
+    })
+    .catch(error => console.error(error));
+};
+
 $('.garage__list').on('click', '.garage__list-item', listItemClick);
 $('.garage-door__button').on('click', garageDoorButtonClick);
 $('.new-item__form__submit').on('click', newItemButtonClick);
 $('.new-item__form__name, .new-item__form__reason').keyup(enableButton);
-
+$('.sort-button').on('click', listSortButtonClick);
 // on page load
 fetchAllItemsInGarage();
