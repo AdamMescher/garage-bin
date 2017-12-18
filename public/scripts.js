@@ -1,9 +1,9 @@
 /* eslint no-console: 0 */
 const appendItemToList = item => $('.garage__list').append(`
   <li id=${item.id} class="garage__list-item">
-    <h2 >${item.name}</h2>
-    <p>reason: <span>${item.reason}</span></p>
-    <p>cleanliness: <span>${item.cleanliness}</span></p>
+    <h2>${item.name}</h2>
+    <p class="hidden">reason: <span>${item.reason}</span></p>
+    <p class="hidden">cleanliness: <span>${item.cleanliness}</span></p>
   </li> `);
 
 const updateGarageItemStats = (total, sparkling, dusty, rancid) => {
@@ -50,7 +50,7 @@ const garageDoorButtonClick = () => {
 };
 
 function listItemClick() {
-  const id = $(this).attr('id');
+  $(this).find('p').toggleClass('hidden');
 }
 
 const clearInputFields = () => {
@@ -136,8 +136,6 @@ const sortDescending = (a,b) => {
   }
   return comparison * -1;
 };
-
-
 
 const listSortButtonClick = () => {
   $('li').remove();
