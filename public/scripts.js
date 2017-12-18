@@ -5,13 +5,60 @@ const appendItemToList = item => $('.garage__list').append(`
     <p>cleanliness: <span>${item.cleanliness}</span></p>
   </li> `);
 
-const fetchAllItemsInGarage = () => {
-  fetch('api/v1/items')
+const updateGarageItemStats = (total, sparkling, dusty, rancid) => {
+  if (!total) {
+    $('.item-stats').append(`
+      <p class="item-stats__total">
+        Total Items: 
+        <span class="item-stats__total--count"></span>
+      </p>
+      <p class="item-stats__sparkling">
+        Sparkling items:
+        <span class="item-stats__sparkling--count"></span>
+      </p>
+      <p class="item-stats__dirty">
+        Dusty items:
+      </p>
+      <p class="item-stats__rancid">
+        Rancid items:
+        <span class="item-stats__rancid--count"></span>
+      </p>
+  `);
+  }
+  $('.item-stats p').remove();
+  $('.item-stats').append(`
+    <p class="item-stats__total">
+      Total Items: 
+      <span class="item-stats__total--count">${total}</span>
+    </p>
+    <p class="item-stats__sparkling">
+      Sparkling items:
+      <span class="item-stats__sparkling--count">${sparkling}</span>
+    </p>
+    <p class="item-stats__dirty">
+      Dusty items:
+      <span class="item-stats__dirty--count">${dusty}</span>
+    </p>
+    <p class="item-stats__rancid">
+      Rancid items:
+      <span class="item-stats__rancid--count">${rancid}</span>
+    </p>
+  `);
+};
+
+const fetchAllItemsInGarage = async () => {
+  await fetch('api/v1/items')
     .then(response => response.json())
     .then((response) => {
       response.items.map((item) => {
         appendItemToList(item);
       });
+      const total = response.items.length;
+      const sparkling = response.items.filter(item => item.cleanliness === 'Sparkling').length;
+      const dusty = response.items.filter(item => item.cleanliness === 'Dusty').length;
+      const rancid = response.items.filter(item => item.cleanliness === 'Rancid').length;
+
+      updateGarageItemStats(total, sparkling, dusty, rancid);
     })
     .catch(error => console.log(error));
 };
@@ -53,7 +100,9 @@ function newItemButtonClick(event) {
       appendItemToList(body);
     })
     .catch(error => console.error(error));
-
+  
+  
+  updateGarageItemStats();
   clearInputFields();
 }
 
@@ -80,3 +129,4 @@ $('.new-item__form__name, .new-item__form__reason').keyup(enableButton);
 
 // on page load
 fetchAllItemsInGarage();
+updateGarageItemStats();
