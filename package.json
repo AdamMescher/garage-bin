@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha --exit",
+    "lint": "./node_modules/.bin/eslint ./db/. ./public/. ./scrape/. ./test"
   },
   "repository": {
     "type": "git",
@@ -18,10 +19,13 @@
   },
   "homepage": "https://github.com/AdamMescher/garage-bin#readme",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.2",
-    "knex": "^0.14.2"
+    "knex": "^0.14.2",
+    "pg": "^7.4.0"
   },
   "devDependencies": {
+    "babel-eslint": "^8.0.3",
     "chai": "^4.1.2",
     "chai-http": "git+https://github.com/chaijs/chai-http.git#3ea4524",
     "eslint": "^4.13.1",
