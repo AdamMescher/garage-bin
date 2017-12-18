@@ -26,20 +26,57 @@ function listItemClick() {
   const id = $(this).attr('id');
 }
 
+const clearInputFields = () => {
+  $('.new-item__form__name').val('');
+  $('.new-item__form__reason').val('');
+  $('.new-item__form__select').val('');
+};
+
+const buildPostFetchPayload = body => ({
+  headers: { 'Content-Type': 'application/json' },
+  method: 'POST',
+  body: JSON.stringify(body),
+});
+
 function newItemButtonClick(event) {
   event.preventDefault();
   const name = $('.new-item__form__name').val();
   const reason = $('.new-item__form__reason').val();
   const cleanliness = $('.new-item__form__select').val();
-  const postBody = {
-    
+
+  const body = { name, reason, cleanliness };
+  const postBody = buildPostFetchPayload(body);
+
+  fetch('/api/v1/items', postBody)
+    .then(response => response.json())
+    .then(() => {
+      appendItemToList(body);
+    })
+    .catch(error => console.error(error));
+
+  clearInputFields();
+}
+
+const enableNewItemSubmitButton = () => {
+  $('.new-item__form__submit').removeAttr('disabled');
+};
+
+const disableNewItemSubmitButton = () => {
+  $('.new-item__form__submit').attr('disabled', true);
+};
+
+function enableButton() {
+  if (($('.new-item__form__name').val() !== '') && ($('.new-item__form__reason').val() !== '')) {
+    enableNewItemSubmitButton();
+  } else {
+    disableNewItemSubmitButton();
   }
 }
 
 $('.garage__list').on('click', '.garage__list-item', listItemClick);
 $('.garage-door__button').on('click', garageDoorButtonClick);
 $('.new-item__form__submit').on('click', newItemButtonClick);
-
+$('.new-item__form__name, .new-item__form__reason').keyup(enableButton);
 
 // on page load
 fetchAllItemsInGarage();
