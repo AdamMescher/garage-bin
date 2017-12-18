@@ -1,3 +1,49 @@
-h1 {
-  color: green;
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100vh;
+  width: 100%;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+}
+
+.garage-door {
+  height: 50%;
+  width: 100%;
+  background-color: green;
+}
+
+.garage-door__button {
+  height: 100px;
+  padding: 5px 20px 5px 20px;
+}
+
+.garage__list__container {
+  margin: 5%;
+  height: 100%;
+}
+
+.garage__list-item {
+  margin-top: 5%;
+  list-style: none;
+  border: 2px solid red;
+}
+
+.garage__list-item h2 {
+  margin-bottom: 10px;
+  border-bottom: 1px black solid;
+}
+
+.garage__list-item p {
+  margin: 5px 0 5px 0;
+}
+
+.hidden {
+  display: none;
 }
