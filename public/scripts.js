@@ -6,25 +6,6 @@ const appendItemToList = item => $('.garage__list').append(`
   </li> `);
 
 const updateGarageItemStats = (total, sparkling, dusty, rancid) => {
-  if (!total) {
-    $('.item-stats').append(`
-      <p class="item-stats__total">
-        Total Items: 
-        <span class="item-stats__total--count"></span>
-      </p>
-      <p class="item-stats__sparkling">
-        Sparkling items:
-        <span class="item-stats__sparkling--count"></span>
-      </p>
-      <p class="item-stats__dirty">
-        Dusty items:
-      </p>
-      <p class="item-stats__rancid">
-        Rancid items:
-        <span class="item-stats__rancid--count"></span>
-      </p>
-  `);
-  }
   $('.item-stats p').remove();
   $('.item-stats').append(`
     <p class="item-stats__total">
@@ -85,7 +66,7 @@ const buildPostFetchPayload = body => ({
   body: JSON.stringify(body),
 });
 
-function newItemButtonClick(event) {
+async function newItemButtonClick(event) {
   event.preventDefault();
   const name = $('.new-item__form__name').val();
   const reason = $('.new-item__form__reason').val();
@@ -94,16 +75,25 @@ function newItemButtonClick(event) {
   const body = { name, reason, cleanliness };
   const postBody = buildPostFetchPayload(body);
 
-  fetch('/api/v1/items', postBody)
+  await fetch('/api/v1/items', postBody)
     .then(response => response.json())
     .then(() => {
       appendItemToList(body);
     })
     .catch(error => console.error(error));
-  
-  
-  updateGarageItemStats();
-  clearInputFields();
+
+  fetch('/api/v1/items')
+    .then(response => response.json())
+    .then((response) => {
+      const total = response.items.length;
+      const sparkling = response.items.filter(item => item.cleanliness === 'Sparkling').length;
+      const dusty = response.items.filter(item => item.cleanliness === 'Dusty').length;
+      const rancid = response.items.filter(item => item.cleanliness === 'Rancid').length;
+
+      updateGarageItemStats(total, sparkling, dusty, rancid);
+    })
+    .catch(error => console.error(error));
+    clearInputFields();
 }
 
 const enableNewItemSubmitButton = () => {
@@ -129,4 +119,3 @@ $('.new-item__form__name, .new-item__form__reason').keyup(enableButton);
 
 // on page load
 fetchAllItemsInGarage();
-updateGarageItemStats();
