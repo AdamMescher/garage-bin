@@ -1,10 +1,19 @@
 /* eslint no-console: 0 */
-const appendItemToList = item => $('.garage__list').append(`
+const appendItemToList = (item) => {
+  $('.garage__list').append(`
   <li id=${item.id} class="garage__list-item">
     <h2>${item.name}</h2>
     <p class="hidden">reason: <span>${item.reason}</span></p>
-    <p class="hidden">cleanliness: <span>${item.cleanliness}</span></p>
+    <p class="hidden">cleanliness: 
+      <select class="garage__list-item__select">
+        <option value="Sparkling">Sparkling</option>
+        <option value="Dusty">Dusty</option>
+        <option value="Rancid">Rancid</option>
+      </select>
+    </p>
   </li> `);
+  $(`#${item.id} .garage__list-item__select`).val(item.cleanliness);
+};
 
 const updateGarageItemStats = (total, sparkling, dusty, rancid) => {
   $('.item-stats p').remove();
@@ -124,7 +133,7 @@ const sortAscending = (a, b) => {
   return comparison;
 };
 
-const sortDescending = (a,b) => {
+const sortDescending = (a, b) => {
   const itemA = a.name.toUpperCase();
   const itemB = b.name.toUpperCase();
 
