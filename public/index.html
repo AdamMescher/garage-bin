@@ -9,18 +9,20 @@
     <main>
       <section class="garage-door"></section>
       <h1>Garage Bin</h1>
-      <button class="garage-door__button">open</button>
+      <button class="garage-door__button">open garage</button>
+      <button class="sort-button">sort</button>
       <form class="new-item__form">
-        <input class="new-item__form__name" type="text" placeholder="item name" />
-        <input class="new-item__form__reason" type="text" placeholder="reason in garage" />
-        <select class="new-item__form__select">
+        <input class="new-item__form__name" type="text" placeholder="item name" required/>
+        <input class="new-item__form__reason" type="text" placeholder="reason in garage" required/>
+        <select class="new-item__form__select" required>
           <option>Sparkling</option>
           <option>Dusty</option>
           <option>Rancid</option>
         </select>
-        <button class="new-item__form__submit">add new item</button>
+        <button class="new-item__form__submit" disabled="true">add new item</button>
       </form>
       <section class="garage__list__container">
+        <article class="item-stats"></article>
         <ul class="garage__list hidden"></ul>
       </section>
     </main>
