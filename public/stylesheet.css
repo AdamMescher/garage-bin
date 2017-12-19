@@ -9,25 +9,99 @@ html {
 }
 
 body {
+  font-family: 'Barlow', sans-serif;
   height: 100%;
   width: 100%;
+  background-color: #11151C;
+}
+
+main {
+  text-align: center;
+}
+
+main h1 {
+  color: white;
 }
 
 .garage-door {
-  height: 50%;
+  height: 80%;
   width: 100%;
   background-image: url('./assets/garageDoorTexture.jpg');
   background-repeat: no-repeat;
 }
 
+.garage-door__button,
+.sort-button {
+  height: 50px;
+  font-size: 2em;
+  border: none;
+  width: 25%;
+  background-color: #05668D;
+  color: white;
+}
+
+.garage-door__button:hover,
+.sort-button:hover {
+  background-color: #00A896;
+}
+
 .garage-door__button {
   height: 100px;
   padding: 5px 20px 5px 20px;
+  margin-right: 20px;
 }
 
 .sort-button {
   height: 100px;
   padding: 5px 20px 5px 20px;
+}
+
+.new-item__form {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.new-item__form input,
+.new-item__form select {
+  margin: 10px 0 10px 0;
+  height: 40px;
+  border-radius: 5px;
+  border: 2px solid #364156;
+}
+
+.new-item__form__submit {
+  width: 50%;
+  margin-left: 25%;
+  height: 50px;
+  background-color: #05668D;
+  color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.new-item__form__submit:hover {
+  background-color: #00A896;
+}
+
+.new-item__form__submit:disabled {
+  background-color: grey;
+}
+
+.new-item__form input::placeholder {
+  margin-left: 20px;
+  padding-left: 20px;
+}
+
+.item-stats {
+  background-color: white;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 1.3em;
+}
+
+.item-stats p {
+  padding: 5px;
 }
 
 .garage__list__container {
@@ -37,15 +111,21 @@ body {
 
 .garage__list-item {
   margin-top: 5%;
+  background-color: white;
   list-style: none;
-  border: 2px solid red;
+  border-radius: 5px;
+  padding: 30px;
 }
 
 .garage__list-item h2 {
+  fonst-size: 1.5em;
   margin-bottom: 10px;
+  text-transform: uppercase;
+  text-align: center;
 }
 
 .garage__list-item p {
+  font-size: 1.2em;
   margin: 5px 0 5px 0;
 }
 
