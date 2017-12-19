@@ -3,8 +3,8 @@ const appendItemToList = (item) => {
   $('.garage__list').append(`
   <li id=${item.id} class="garage__list-item">
     <h2>${item.name}</h2>
-    <p class="hidden">reason: <span>${item.reason}</span></p>
-    <p class="hidden">cleanliness: 
+    <p>reason: <span>${item.reason}</span></p>
+    <p>cleanliness: 
       <select class="garage__list-item__select">
         <option value="Sparkling">Sparkling</option>
         <option value="Dusty">Dusty</option>
@@ -57,10 +57,6 @@ const garageDoorButtonClick = () => {
     $('.garage__list').toggleClass('hidden');
   });
 };
-
-function listItemClick() {
-  $(this).find('p').toggleClass('hidden');
-}
 
 const clearInputFields = () => {
   $('.new-item__form__name').val('');
@@ -166,7 +162,20 @@ const listSortButtonClick = () => {
     .catch(error => console.error(error));
 };
 
-$('.garage__list').on('click', '.garage__list-item', listItemClick);
+function listItemSelectChange(event) {
+  const id = $(this).parent().parent().attr('id');
+  const patchValue = event.target.value;
+  const patchPayload = {
+    headers: { 'Content-Type': 'application/json' },
+    method: 'PATCH',
+    body: JSON.stringify({ cleanliness: patchValue }),
+  };
+  fetch(`/api/v1/items/${id}`, patchPayload)
+    .then(response => response.json())
+    .then(response => console.log(response));
+}
+
+$('.garage__list').on('change', '.garage__list-item__select', listItemSelectChange);
 $('.garage-door__button').on('click', garageDoorButtonClick);
 $('.new-item__form__submit').on('click', newItemButtonClick);
 $('.new-item__form__name, .new-item__form__reason').keyup(enableButton);
