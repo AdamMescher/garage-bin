@@ -16,10 +16,16 @@ body {
 .garage-door {
   height: 50%;
   width: 100%;
-  background-color: green;
+  background-image: url('./assets/garageDoorTexture.jpg');
+  background-repeat: no-repeat;
 }
 
 .garage-door__button {
+  height: 100px;
+  padding: 5px 20px 5px 20px;
+}
+
+.sort-button {
   height: 100px;
   padding: 5px 20px 5px 20px;
 }
@@ -37,7 +43,6 @@ body {
 
 .garage__list-item h2 {
   margin-bottom: 10px;
-  border-bottom: 1px black solid;
 }
 
 .garage__list-item p {
