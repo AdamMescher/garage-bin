@@ -52,11 +52,16 @@ const fetchAllItemsInGarage = async () => {
     .catch(error => console.error(error));
 };
 
-const garageDoorButtonClick = () => {
+function garageDoorButtonClick() {
+  if ($(this).text() === 'open garage') {
+    $(this).text('close garage');
+  } else {
+    $(this).text('open garage');
+  }
   $('.garage-door').slideToggle('slow', () => {
     $('.garage__list').toggleClass('hidden');
   });
-};
+}
 
 const clearInputFields = () => {
   $('.new-item__form__name').val('');
@@ -162,7 +167,7 @@ const listSortButtonClick = () => {
     .catch(error => console.error(error));
 };
 
-function listItemSelectChange(event) {
+async function listItemSelectChange(event) {
   const id = $(this).parent().parent().attr('id');
   const patchValue = event.target.value;
   const patchPayload = {
@@ -170,9 +175,19 @@ function listItemSelectChange(event) {
     method: 'PATCH',
     body: JSON.stringify({ cleanliness: patchValue }),
   };
-  fetch(`/api/v1/items/${id}`, patchPayload)
+  await fetch(`/api/v1/items/${id}`, patchPayload)
+    .catch(error => console.error(error));
+
+  await fetch('/api/v1/items')
     .then(response => response.json())
-    .then(response => console.log(response));
+    .then((response) => {
+      const total = response.items.length;
+      const sparkling = response.items.filter(item => item.cleanliness === 'Sparkling').length;
+      const dusty = response.items.filter(item => item.cleanliness === 'Dusty').length;
+      const rancid = response.items.filter(item => item.cleanliness === 'Rancid').length;
+
+      updateGarageItemStats(total, sparkling, dusty, rancid);
+    });
 }
 
 $('.garage__list').on('change', '.garage__list-item__select', listItemSelectChange);
@@ -180,5 +195,5 @@ $('.garage-door__button').on('click', garageDoorButtonClick);
 $('.new-item__form__submit').on('click', newItemButtonClick);
 $('.new-item__form__name, .new-item__form__reason').keyup(enableButton);
 $('.sort-button').on('click', listSortButtonClick);
-// on page load
+
 fetchAllItemsInGarage();
