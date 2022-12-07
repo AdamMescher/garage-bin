@@ -20,7 +20,7 @@
   "homepage": "https://github.com/AdamMescher/garage-bin#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
-    "express": "^4.16.2",
+    "express": "^4.17.3",
     "knex": "^0.14.2",
     "pg": "^7.4.0"
   },
